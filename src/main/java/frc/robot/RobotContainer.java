@@ -34,9 +34,12 @@ public class RobotContainer {
 
   private void configureBindings() {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-        drivetrain.applyRequest(() -> drive.withVelocityX((-joystick.getLeftY() * MaxSpeed)/TunerConstants.speedNerf) // Drive forward with
-                                                                                           // negative Y (forward)
-            .withVelocityY((-joystick.getLeftX() * MaxSpeed)/TunerConstants.speedNerf) // Drive left with negative X (left)
+        drivetrain.applyRequest(() -> drive.withVelocityX((-joystick.getLeftY() * MaxSpeed) / TunerConstants.speedNerf) // Drive
+                                                                                                                        // forward
+                                                                                                                        // with
+            // negative Y (forward)
+            .withVelocityY((-joystick.getLeftX() * MaxSpeed) / TunerConstants.speedNerf) // Drive left with negative X
+                                                                                         // (left)
             .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
         ));
 
