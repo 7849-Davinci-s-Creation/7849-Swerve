@@ -4,9 +4,12 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.Orchestra;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.generated.TunerConstants;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
@@ -20,17 +23,20 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    CommandScheduler.getInstance().run(); 
+    CommandScheduler.getInstance().run();
   }
 
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+  }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+  }
 
   @Override
-  public void disabledExit() {}
+  public void disabledExit() {
+  }
 
   @Override
   public void autonomousInit() {
@@ -42,23 +48,45 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+  }
 
   @Override
-  public void autonomousExit() {}
+  public void autonomousExit() {
+  }
 
   @Override
   public void teleopInit() {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    Orchestra orchestra = new Orchestra();
+
+    // Add a single device to the orchestra
+    orchestra.addInstrument(TunerConstants.DriveTrain.getModule(0).getDriveMotor());
+    orchestra.addInstrument(TunerConstants.DriveTrain.getModule(1).getDriveMotor());
+    orchestra.addInstrument(TunerConstants.DriveTrain.getModule(3).getDriveMotor());
+    orchestra.addInstrument(TunerConstants.DriveTrain.getModule(2).getDriveMotor());
+
+    // Attempt to load the chrp
+    var status = orchestra.loadMusic("mm2.chrp");
+
+    if (!status.isOK()) {
+      // log error
+      System.out.println("no gamecube :(");
+    }
+
+   // orchestra.play();                                                         mx 
   }
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+  }
 
   @Override
-  public void teleopExit() {}
+  public void teleopExit() {
+  }
 
   @Override
   public void testInit() {
@@ -66,11 +94,14 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+  }
 
   @Override
-  public void testExit() {}
+  public void testExit() {
+  }
 
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() {
+  }
 }
