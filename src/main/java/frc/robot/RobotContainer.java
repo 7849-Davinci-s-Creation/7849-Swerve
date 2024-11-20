@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.generated.TunerConstants;
+import lib.OperatorControllerUtil;
 
 public class RobotContainer {
   private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
@@ -38,8 +39,9 @@ public class RobotContainer {
                                                                                                                         // forward
                                                                                                                         // with
             // negative Y (forward)
-            .withVelocityY((-joystick.getLeftX() * MaxSpeed) / TunerConstants.speedNerf) // Drive left with negative X
-                                                                                         // (left)
+            .withVelocityY((-OperatorControllerUtil.handleDeadZone(joystick.getLeftX(), 0.5) * MaxSpeed)
+                / TunerConstants.speedNerf) // Drive left with negative X
+            // (left)
             .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
         ));
 

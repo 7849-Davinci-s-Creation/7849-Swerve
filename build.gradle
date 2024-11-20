@@ -10,13 +10,10 @@ java {
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
 
-dependencyResolutionManagement {
-		repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-		repositories {
-			mavenCentral()
-			maven { url 'https://jitpack.io' }
-		}
-	}
+repositories {
+	mavenCentral()
+	maven { url 'https://jitpack.io' }
+}
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project DeployUtils.
