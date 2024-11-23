@@ -7,12 +7,14 @@ package frc.robot;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
+import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.generated.TunerConstants;
 import lib.OperatorControllerUtil;
@@ -32,16 +34,22 @@ public class RobotContainer {
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
   private final Telemetry logger = new Telemetry(MaxSpeed);
+  private final SendableChooser<Command> automenu = AutoBuilder.buildAutoChooser();
+
+  public RobotContainer() {
+    configureBindings();
+    drivetrain.configDrivetrain();
+
+    SmartDashboard.putData("AutoMenu", automenu);
+  }
 
   private void configureBindings() {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-        drivetrain.applyRequest(() -> drive.withVelocityX((-joystick.getLeftY() * MaxSpeed) / TunerConstants.speedNerf) // Drive
-                                                                                                                        // forward
-                                                                                                                        // with
+        drivetrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive
+                                                                                                                        // forward                                                                                                            // with
             // negative Y (forward)
-            .withVelocityY((-OperatorControllerUtil.handleDeadZone(joystick.getLeftX(), 0.5) * MaxSpeed)
-                / TunerConstants.speedNerf) // Drive left with negative X
-            // (left)
+            .withVelocityY(-OperatorControllerUtil.handleDeadZone(joystick.getLeftX(), 0.05) * MaxSpeed) // Drive left with negative X
+                                                                                         // (left)
             .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
         ));
 
@@ -58,11 +66,7 @@ public class RobotContainer {
     drivetrain.registerTelemetry(logger::telemeterize);
   }
 
-  public RobotContainer() {
-    configureBindings();
-  }
-
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return automenu.getSelected();
   }
 }
