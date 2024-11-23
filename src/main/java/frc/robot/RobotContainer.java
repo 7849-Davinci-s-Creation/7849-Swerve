@@ -34,13 +34,17 @@ public class RobotContainer {
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
   private final Telemetry logger = new Telemetry(MaxSpeed);
-  private final SendableChooser<Command> automenu = AutoBuilder.buildAutoChooser();
+  private final SendableChooser<Command> automenu;
 
   public RobotContainer() {
     configureBindings();
-    drivetrain.configDrivetrain();
 
-    SmartDashboard.putData("AutoMenu", automenu);
+    drivetrain.configDrivetrain();
+    automenu = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData(automenu);
+  }
+
+  public void robotInit() {
   }
 
   private void configureBindings() {
