@@ -44,9 +44,6 @@ public class RobotContainer {
     SmartDashboard.putData(automenu);
   }
 
-  public void robotInit() {
-  }
-
   private void configureBindings() {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive
@@ -67,10 +64,24 @@ public class RobotContainer {
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     }
+
     drivetrain.registerTelemetry(logger::telemeterize);
   }
 
   public Command getAutonomousCommand() {
     return automenu.getSelected();
+  }
+
+  public void robotInit() {
+  }
+
+  public void teleopPeriodic() {
+  }
+
+  public void robotPeriodic() {
+    // log path planner odometry
+    logger.logPose(drivetrain::getPose);
+
+    
   }
 }
