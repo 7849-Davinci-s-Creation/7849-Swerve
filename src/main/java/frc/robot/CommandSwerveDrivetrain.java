@@ -131,15 +131,18 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     }
 
     public Pose2d getPose() {
-        return odometer.getEstimatedPosition();
+        return super.getState().Pose;
+        // return odometer.getEstimatedPosition();
     }
 
     public void resetPose(Pose2d pose) {
-        odometer.resetPosition(getGyroAngle(), getModulePositions(), pose);
+        super.m_odometry.resetPosition(getGyroAngle(), getModulePositions(), pose);
+        // odometer.resetPosition(getGyroAngle(), getModulePositions(), pose);
     }
 
     public ChassisSpeeds getChassisSpeeds() {
-        return kinematics.toChassisSpeeds(getModuleStates());
+        return super.m_kinematics.toChassisSpeeds(getModuleStates());
+        // return kinematics.toChassisSpeeds(getModuleStates());
     }
 
     public Rotation2d getGyroAngle() {
