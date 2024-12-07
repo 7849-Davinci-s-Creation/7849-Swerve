@@ -1,6 +1,5 @@
 package frc.robot;
 
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.Utils;
