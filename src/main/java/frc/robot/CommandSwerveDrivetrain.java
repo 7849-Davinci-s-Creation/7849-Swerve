@@ -1,7 +1,5 @@
 package frc.robot;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.Utils;
@@ -24,7 +22,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -95,18 +92,21 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     }
 
     public void drive(ChassisSpeeds chassisSpeeds) {
-        SwerveModuleState[] desiredstates = kinematics
-                .toSwerveModuleStates(ChassisSpeeds.discretize(chassisSpeeds, 0.02));
+        // SwerveModuleState[] desiredstates = kinematics
+        // .toSwerveModuleStates(ChassisSpeeds.discretize(chassisSpeeds, 0.02));
 
-        double maxSpeed = Collections.max(Arrays.asList(desiredstates)).speedMetersPerSecond;
+        // double maxSpeed =
+        // Collections.max(Arrays.asList(desiredstates)).speedMetersPerSecond;
 
-        if (maxSpeed <= Constants.DRIVEDEADBAND_MPS) {
-            for (int i = 0; i < 4; i++) {
-                stop();
-            }
-        } else {
-            setModuleStates(desiredstates);
-        }
+        // if (maxSpeed <= Constants.DRIVEDEADBAND_MPS) {
+        // for (int i = 0; i < 4; i++) {
+        // stop();
+        // }
+        // } else {
+        // setModuleStates(desiredstates);
+        // }
+
+        super.setControl(new SwerveRequest.ApplyChassisSpeeds().withSpeeds(chassisSpeeds));
 
     }
 
@@ -136,12 +136,12 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     }
 
     public void resetPose(Pose2d pose) {
-        super.m_odometry.resetPosition(getGyroAngle(), getModulePositions(), pose);
+        super.seedFieldRelative(pose);
         // odometer.resetPosition(getGyroAngle(), getModulePositions(), pose);
     }
 
     public ChassisSpeeds getChassisSpeeds() {
-        return super.m_kinematics.toChassisSpeeds(getModuleStates());
+        return super.m_kinematics.toChassisSpeeds(this.getState().ModuleStates);
         // return kinematics.toChassisSpeeds(getModuleStates());
     }
 
@@ -176,17 +176,27 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                 this::getChassisSpeeds,
                 this::drive,
                 new HolonomicPathFollowerConfig(
-                        new PIDConstants(5.0, 0, 0),
+                        new PIDConstants(10.0, 0, 0),
 
-                        new PIDConstants(5.0, 0, 0),
+                        new PIDConstants(10.0, 0, 0),
 
                         1,
-
-                        new Translation2d(Constants.TRACKWIDTHMETERS / 2.0, Constants.TRACKWIDTHMETERS / 2.0).getNorm(),
+                        Constants.CHASSIS_RADIUS,
 
                         new ReplanningConfig()),
 
-                () -> DriverStation.getAlliance().get().equals(Alliance.Red),
+                () -> {
+                    // Boolean supplier that controls when the path will be mirrored for the red
+                    // alliance
+                    // This will flip the path being followed to the red side of the field.
+                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+                    var alliance = DriverStation.getAlliance();
+                    if (alliance.isPresent()) {
+                        return alliance.get() == DriverStation.Alliance.Red;
+                    }
+                    return false;
+                },
 
                 this);
     }
