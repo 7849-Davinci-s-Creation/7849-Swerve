@@ -95,7 +95,7 @@ public class Telemetry {
 
         private final StructArrayPublisher<SwerveModuleState> swerveStates = inst
                         .getStructArrayTopic("MyStates", SwerveModuleState.struct).publish();
-        
+
         // to log x pose
         private final DoubleArrayPublisher loggedPose = table.getDoubleArrayTopic("LoggedPose").publish();
 
@@ -133,7 +133,8 @@ public class Telemetry {
                         SmartDashboard.putData("Module " + i, m_moduleMechanisms[i]);
 
                         // load swerve drive states into states array
-                        states[i] = new SwerveModuleState(state.ModuleStates[i].speedMetersPerSecond, state.ModuleStates[i].angle);
+                        states[i] = new SwerveModuleState(state.ModuleStates[i].speedMetersPerSecond,
+                                        state.ModuleStates[i].angle);
                         swerveStates.set(states);
                 }
         }
@@ -143,9 +144,9 @@ public class Telemetry {
                 Pose2d pose = poseSupplier.get();
 
                 loggedPose.set(new double[] {
-                        pose.getX(),
-                        pose.getY(),
-                        pose.getRotation().getDegrees()
+                                pose.getX(),
+                                pose.getY(),
+                                pose.getRotation().getDegrees()
                 });
         }
 }

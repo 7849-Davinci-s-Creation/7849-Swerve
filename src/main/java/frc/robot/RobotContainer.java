@@ -47,10 +47,12 @@ public class RobotContainer {
   private void configureBindings() {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive
-                                                                                                                        // forward                                                                                                            // with
+                                                                                           // forward // with
             // negative Y (forward)
-            .withVelocityY(-OperatorControllerUtil.handleDeadZone(joystick.getLeftX(), 0.05) * MaxSpeed) // Drive left with negative X
-                                                                                         // (left)
+            .withVelocityY(-OperatorControllerUtil.handleDeadZone(joystick.getLeftX(), 0.05) * MaxSpeed) // Drive left
+                                                                                                         // with
+                                                                                                         // negative X
+            // (left)
             .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
         ));
 
@@ -82,6 +84,5 @@ public class RobotContainer {
     // log path planner odometry
     logger.logPose(drivetrain::getPose);
 
-    
   }
 }
