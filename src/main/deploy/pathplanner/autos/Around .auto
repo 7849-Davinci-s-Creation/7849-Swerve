@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.386419439505546,
+      "y": 5.558377783422233
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Around-The-World"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Around pt1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Around pt 2"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

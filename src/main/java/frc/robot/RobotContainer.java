@@ -8,6 +8,7 @@ import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -16,7 +17,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.Playsog;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import lib.OperatorControllerUtil;
 
 public class RobotContainer {
@@ -38,6 +41,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureBindings();
+    registerNamedCommands();
 
     drivetrain.configDrivetrain();
     automenu = AutoBuilder.buildAutoChooser();
@@ -63,6 +67,8 @@ public class RobotContainer {
     // reset the field-centric heading on left bumper press
     joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
+    joystick.back().onTrue(drivetrain.runOnce(() -> drivetrain.zeroRobotPose()));
+
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     }
@@ -72,6 +78,10 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return automenu.getSelected();
+  }
+
+  public void registerNamedCommands() {
+    NamedCommands.registerCommand("Around-The-World", new Playsog("aroundtheworld.chrp"));
   }
 
   public void robotInit() {

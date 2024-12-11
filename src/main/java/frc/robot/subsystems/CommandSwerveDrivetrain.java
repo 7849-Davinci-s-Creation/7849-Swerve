@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.subsystems;
 
 import java.util.function.Supplier;
 
@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Constants;
 
 /**
  * Class that extends the Phoenix SwerveDrivetrain class and implements
@@ -169,6 +170,10 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         return states;
     }
 
+    public void zeroRobotPose() {
+        super.seedFieldRelative(new Pose2d());
+    }
+
     public void configDrivetrain() {
         AutoBuilder.configureHolonomic(
                 this::getPose,
@@ -180,7 +185,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
                         new PIDConstants(10.0, 0, 0),
 
-                        1,
+                        3,
                         Constants.CHASSIS_RADIUS,
 
                         new ReplanningConfig()),

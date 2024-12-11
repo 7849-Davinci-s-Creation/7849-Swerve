@@ -1,0 +1,61 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.343662687325375,
+      "y": 5.558377783422233
+    },
+    "rotation": 180.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5pc nuggs pt 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": " 5pc nuggs pt 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5pc nuggs pt 3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5pc nuggs pt 4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5pc nuggs pt 5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5pc nuggs pt 6"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5pc nuggs pt 7"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
