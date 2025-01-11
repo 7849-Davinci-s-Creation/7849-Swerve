@@ -82,6 +82,7 @@ public class RobotContainer {
 
   public void registerNamedCommands() {
     NamedCommands.registerCommand("Around-The-World", new Playsog("aroundtheworld.chrp"));
+    NamedCommands.registerCommand("sonic", new Playsog("sonic.chrp"));
   }
 
   public void robotInit() {

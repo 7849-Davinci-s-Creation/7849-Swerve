@@ -68,10 +68,10 @@ public class Robot extends TimedRobot {
     Orchestra orchestra = new Orchestra();
 
     // Add a single device to the orchestra
-    orchestra.addInstrument(TunerConstants.DriveTrain.getModule(0).getDriveMotor());
-    orchestra.addInstrument(TunerConstants.DriveTrain.getModule(1).getDriveMotor());
-    orchestra.addInstrument(TunerConstants.DriveTrain.getModule(3).getDriveMotor());
-    orchestra.addInstrument(TunerConstants.DriveTrain.getModule(2).getDriveMotor());
+    orchestra.addInstrument(TunerConstants.DriveTrain.getModule(0).getSteerMotor());
+    orchestra.addInstrument(TunerConstants.DriveTrain.getModule(1).getSteerMotor());
+    orchestra.addInstrument(TunerConstants.DriveTrain.getModule(3).getSteerMotor());
+    orchestra.addInstrument(TunerConstants.DriveTrain.getModule(2).getSteerMotor());
 
     // Attempt to load the chrp
     var status = orchestra.loadMusic("mm2.chrp");
@@ -81,7 +81,7 @@ public class Robot extends TimedRobot {
       System.out.println("no gamecube :(");
     }
 
-    // orchestra.play();
+   // orchestra.play();
 
     orchestra.close();
   }
