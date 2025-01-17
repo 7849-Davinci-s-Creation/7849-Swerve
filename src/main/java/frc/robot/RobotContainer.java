@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.led.CANdle;
+import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
@@ -16,19 +18,25 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Playsog;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.Candlesubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import lib.OperatorControllerUtil;
 
 public class RobotContainer {
+  // Subsystems
+  private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
+  private final Candlesubsystem candlesubsystem = new Candlesubsystem(Constants.DeviceIDs.CANDLE_ID);
+
   private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
   /* Setting up bindings for necessary control of the swerve drive platform */
-  private final CommandXboxController joystick = new CommandXboxController(1); // My joystick
-  private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
+  private final CommandXboxController joystick = new CommandXboxController(Constants.OperatorConstants.JOYSTICK_PORT); // My
+                                                                                                                       // joystick
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
@@ -85,15 +93,50 @@ public class RobotContainer {
     NamedCommands.registerCommand("sonic", new Playsog("sonic.chrp"));
   }
 
+
   public void robotInit() {
+  }
+
+ 
+  public void robotPeriodic() {
+  }
+
+  public void disabledInit() {
+  }
+
+  public void disabledPeriodic() {
+  }
+
+  public void disabledExit() {
+  }
+
+  public void autonomousInit() {
+  }
+
+  public void autonomousPeriodic() {
+  }
+
+  public void autonomousExit() {
+  }
+
+  public void teleopInit() {
   }
 
   public void teleopPeriodic() {
   }
 
-  public void robotPeriodic() {
-    // log path planner odometry
-    logger.logPose(drivetrain::getPose);
+  public void teleopExit() {
+  }
 
+  public void testInit() {
+  }
+
+  public void testPeriodic() {
+  }
+
+  public void testExit() {
+  }
+
+  public void simulationPeriodic() {
   }
 }

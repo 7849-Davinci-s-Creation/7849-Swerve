@@ -40,16 +40,16 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
             // Front Left
-            new Translation2d(Constants.TRACKWIDTHMETERS / 2.0, Constants.TRACKWIDTHMETERS / 2.0),
+            new Translation2d(Constants.DrivetrainConstants.TRACKWIDTHMETERS / 2.0, Constants.DrivetrainConstants.TRACKWIDTHMETERS / 2.0),
             // Front Right
-            new Translation2d(Constants.TRACKWIDTHMETERS / 2.0, -Constants.TRACKWIDTHMETERS / 2.0),
+            new Translation2d(Constants.DrivetrainConstants.TRACKWIDTHMETERS / 2.0, -Constants.DrivetrainConstants.TRACKWIDTHMETERS / 2.0),
             // Back Left
-            new Translation2d(-Constants.TRACKWIDTHMETERS / 2.0, Constants.TRACKWIDTHMETERS / 2.0),
+            new Translation2d(-Constants.DrivetrainConstants.TRACKWIDTHMETERS / 2.0, Constants.DrivetrainConstants.TRACKWIDTHMETERS / 2.0),
             // Back Right
-            new Translation2d(-Constants.TRACKWIDTHMETERS / 2.0, -Constants.TRACKWIDTHMETERS / 2.0));
+            new Translation2d(-Constants.DrivetrainConstants.TRACKWIDTHMETERS / 2.0, -Constants.DrivetrainConstants.TRACKWIDTHMETERS / 2.0));
 
     private final SwerveDrivePoseEstimator odometer = new SwerveDrivePoseEstimator(
-            kinematics, getGyroAngle(), getModulePositions(), Constants.DRIVEODOMETRY_ORIGN);
+            kinematics, getGyroAngle(), getModulePositions(), Constants.DrivetrainConstants.DRIVEODOMETRY_ORIGN);
 
     private final Rotation2d[] lastAngles = new Rotation2d[] {
             new Rotation2d(),
@@ -119,7 +119,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         // MATH CRAP
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.MAXVELOCITY_MPS);
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.DrivetrainConstants.MAXVELOCITY_MPS);
 
         for (int i = 0; i < 4; i++) {
             setModule(i, desiredStates[i]);
@@ -186,7 +186,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                         new PIDConstants(10.0, 0, 0),
 
                         3,
-                        Constants.CHASSIS_RADIUS,
+                        Constants.DrivetrainConstants.CHASSIS_RADIUS,
 
                         new ReplanningConfig()),
 
