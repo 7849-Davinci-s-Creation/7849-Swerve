@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.led.Animation;
+import com.ctre.phoenix.led.FireAnimation;
+import com.ctre.phoenix.led.RainbowAnimation;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
@@ -90,39 +93,47 @@ public class RobotContainer {
     NamedCommands.registerCommand("sonic", new Playsog("sonic.chrp"));
   }
 
-
   public void robotInit() {
   }
 
- 
   public void robotPeriodic() {
   }
 
   public void disabledInit() {
+    candlesubsystem.dontAnimate();
+    candlesubsystem.setAllLEDToColor(0, 255, 0);
   }
 
   public void disabledPeriodic() {
   }
 
   public void disabledExit() {
+    candlesubsystem.dontAnimate();
   }
 
   public void autonomousInit() {
+    candlesubsystem.dontAnimate();
+    candlesubsystem.setAllLEDToColor(206, 134, 203);
   }
 
   public void autonomousPeriodic() {
   }
 
   public void autonomousExit() {
+    candlesubsystem.dontAnimate();
   }
 
   public void teleopInit() {
+    candlesubsystem.dontAnimate();
+    // candlesubsystem.doAnimate(new FireAnimation(0.9,0.1,120,0.2,0.3,true,0));
+    candlesubsystem.doAnimate(new RainbowAnimation(0.9, 0.1, Constants.MiscConstants.LEDNUMB));
   }
 
   public void teleopPeriodic() {
   }
 
   public void teleopExit() {
+    candlesubsystem.dontAnimate();
   }
 
   public void testInit() {

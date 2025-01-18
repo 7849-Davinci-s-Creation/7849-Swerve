@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.led.Animation;
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.CANdleConfiguration;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
@@ -24,14 +25,22 @@ public class CandleSubsystem extends SubsystemBase {
         System.out.println("Candle Configuration Complete");
     }
 
-    public void setAllLEDToColor(int[] rgb) {
-        candle.setLEDs(rgb[0], rgb[1], rgb[2]);
+    public void setAllLEDToColor(int r, int g, int b) {
+        candle.setLEDs(r, g, b);
         setModulatedOutput(0.9);
     }
 
     public void setOneLedToColor(int[] rgb, int ledNumber) {
         candle.setLEDs(rgb[0], rgb[1], rgb[2], 0, ledNumber, 1);
         setModulatedOutput(0.9);
+    }
+
+    public void doAnimate(Animation mouse) {
+        candle.animate(mouse);
+    }
+
+    public void dontAnimate() {
+        candle.clearAnimation(0);
     }
 
     public void setLEDOff() {

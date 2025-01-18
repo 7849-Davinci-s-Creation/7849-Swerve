@@ -18,7 +18,11 @@ public final class Constants {
         public static final int JOYSTICK_PORT = 1;
     }
 
+    public static final class MiscConstants {
+        public static final int LEDNUMB = 158;
+    }
+
     public static final class DeviceIDs {
-        public static final int CANDLE_ID = 0;
+        public static final int CANDLE_ID = 10;
     }
 }
