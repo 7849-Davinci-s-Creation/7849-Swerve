@@ -55,10 +55,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
+    m_robotContainer.autonomousPeriodic();
   }
 
   @Override
   public void autonomousExit() {
+    m_robotContainer.autonomousExit();
   }
 
   @Override
@@ -109,7 +111,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {
-    m_robotContainer.teleopPeriodic();
+    m_robotContainer.testPeriodic();
   }
 
   @Override

@@ -19,14 +19,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Playsog;
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.Candlesubsystem;
+import frc.robot.subsystems.CandleSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import lib.OperatorControllerUtil;
 
 public class RobotContainer {
   // Subsystems
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
-  private final Candlesubsystem candlesubsystem = new Candlesubsystem(Constants.DeviceIDs.CANDLE_ID);
+  private final CandleSubsystem candlesubsystem = new CandleSubsystem(Constants.DeviceIDs.CANDLE_ID);
 
   private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
@@ -70,9 +70,9 @@ public class RobotContainer {
         .applyRequest(() -> point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))));
 
     // reset the field-centric heading on left bumper press
-    joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+    joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldRelative));
 
-    joystick.back().onTrue(drivetrain.runOnce(() -> drivetrain.zeroRobotPose()));
+    joystick.back().onTrue(drivetrain.runOnce(drivetrain::zeroRobotPose));
 
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
