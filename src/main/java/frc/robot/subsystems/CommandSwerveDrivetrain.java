@@ -197,10 +197,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                     // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
                     var alliance = DriverStation.getAlliance();
-                    if (alliance.isPresent()) {
-                        return alliance.get() == DriverStation.Alliance.Red;
-                    }
-                    return false;
+                    return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
                 },
 
                 this);

@@ -44,7 +44,7 @@ public class Playsog extends Command {
     }
 
     @Override
-    public void end(boolean interuppted) {
+    public void end(boolean interrupted) {
         orchestra.close();
     }
 

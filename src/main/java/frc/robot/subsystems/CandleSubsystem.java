@@ -7,12 +7,14 @@ import com.ctre.phoenix.led.CANdle.VBatOutputMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Candlesubsystem extends SubsystemBase {
+public class CandleSubsystem extends SubsystemBase {
     private final CANdle candle;
 
-    public Candlesubsystem(int deviceID) {
+    public CandleSubsystem(int deviceID) {
         candle = new CANdle(deviceID);
+
         CANdleConfiguration configAll = new CANdleConfiguration();
+
         configAll.statusLedOffWhenActive = false;
         configAll.disableWhenLOS = false;
         configAll.stripType = LEDStripType.RGB;
