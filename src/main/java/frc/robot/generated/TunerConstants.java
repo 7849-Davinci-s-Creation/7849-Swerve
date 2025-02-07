@@ -36,7 +36,7 @@ public class TunerConstants {
 
         // The stator current at which the wheels start to slip;
         // This needs to be tuned to your individual robot
-        private static final double kSlipCurrentA = 150.0;
+        private static final double SLIP_CURRENT_A = 150.0;
 
         // Theoretical free speed (m/s) at 12v applied output;
         // This needs to be tuned to your individual robot
@@ -71,7 +71,7 @@ public class TunerConstants {
                         .withDriveMotorGearRatio(kDriveGearRatio)
                         .withSteerMotorGearRatio(kSteerGearRatio)
                         .withWheelRadius(kWheelRadiusInches)
-                        .withSlipCurrent(kSlipCurrentA)
+                        .withSlipCurrent(SLIP_CURRENT_A)
                         .withSteerMotorGains(steerGains)
                         .withDriveMotorGains(driveGains)
                         .withSteerMotorClosedLoopOutput(steerClosedLoopOutput)
@@ -148,6 +148,4 @@ public class TunerConstants {
         public static final CommandSwerveDrivetrain DriveTrain = new CommandSwerveDrivetrain(DrivetrainConstants,
                         FrontLeft,
                         FrontRight, BackLeft, BackRight);
-
-        public static final double speedNerf = 3.5;
 }

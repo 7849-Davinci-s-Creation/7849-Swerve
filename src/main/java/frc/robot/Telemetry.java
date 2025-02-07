@@ -130,7 +130,7 @@ public class Telemetry {
                         m_moduleDirections[i].setAngle(state.ModuleStates[i].angle);
                         m_moduleSpeeds[i].setLength(state.ModuleStates[i].speedMetersPerSecond / (2 * MaxSpeed));
 
-                        SmartDashboard.putData("Module " + i, m_moduleMechanisms[i]);
+                        //SmartDashboard.putData("Module " + i, m_moduleMechanisms[i]);
 
                         // load swerve drive states into states array
                         states[i] = new SwerveModuleState(state.ModuleStates[i].speedMetersPerSecond,
