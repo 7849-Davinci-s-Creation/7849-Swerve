@@ -29,7 +29,7 @@ import lib.OperatorControllerUtil;
 public class RobotContainer {
   // Subsystems
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
-  private final CandleSubsystem candlesubsystem = new CandleSubsystem(Constants.DeviceIDs.CANDLE_ID);
+  //private final CandleSubsystem candlesubsystem = new CandleSubsystem(Constants.DeviceIDs.CANDLE_ID);
 
   private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
@@ -100,40 +100,40 @@ public class RobotContainer {
   }
 
   public void disabledInit() {
-    candlesubsystem.dontAnimate();
-    candlesubsystem.setAllLEDToColor(0, 255, 0);
+    // candlesubsystem.dontAnimate();
+    // candlesubsystem.setAllLEDToColor(0, 255, 0);
   }
 
   public void disabledPeriodic() {
   }
 
   public void disabledExit() {
-    candlesubsystem.dontAnimate();
+    // candlesubsystem.dontAnimate();
   }
 
   public void autonomousInit() {
-    candlesubsystem.dontAnimate();
-    candlesubsystem.setAllLEDToColor(206, 134, 203);
+    // candlesubsystem.dontAnimate();
+    // candlesubsystem.setAllLEDToColor(206, 134, 203);
   }
 
   public void autonomousPeriodic() {
   }
 
   public void autonomousExit() {
-    candlesubsystem.dontAnimate();
+    // candlesubsystem.dontAnimate();
   }
 
   public void teleopInit() {
-    candlesubsystem.dontAnimate();
-    // candlesubsystem.doAnimate(new FireAnimation(0.9,0.1,120,0.2,0.3,true,0));
-    candlesubsystem.doAnimate(new RainbowAnimation(0.9, 0.1, Constants.MiscConstants.LEDNUMB));
+    // candlesubsystem.dontAnimate();
+    // // candlesubsystem.doAnimate(new FireAnimation(0.9,0.1,120,0.2,0.3,true,0));
+    // candlesubsystem.doAnimate(new RainbowAnimation(0.9, 0.1, Constants.MiscConstants.LEDNUMB));
   }
 
   public void teleopPeriodic() {
   }
 
   public void teleopExit() {
-    candlesubsystem.dontAnimate();
+    // candlesubsystem.dontAnimate();
   }
 
   public void testInit() {
