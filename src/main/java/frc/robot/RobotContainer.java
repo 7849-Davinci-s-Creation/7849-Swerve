@@ -4,147 +4,75 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.led.Animation;
-import com.ctre.phoenix.led.FireAnimation;
-import com.ctre.phoenix.led.RainbowAnimation;
-import com.ctre.phoenix6.Utils;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
+import static edu.wpi.first.units.Units.*;
 
-import edu.wpi.first.math.geometry.Pose2d;
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest;
+
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.Playsog;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.CandleSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import lib.OperatorControllerUtil;
 
 public class RobotContainer {
-  // Subsystems
-  private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
-  //private final CandleSubsystem candlesubsystem = new CandleSubsystem(Constants.DeviceIDs.CANDLE_ID);
+    private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
-  private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
-  private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
+    /* Setting up bindings for necessary control of the swerve drive platform */
+    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+    private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+    private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
-  /* Setting up bindings for necessary control of the swerve drive platform */
-  private final CommandXboxController joystick = new CommandXboxController(Constants.OperatorConstants.JOYSTICK_PORT); // My
-                                                                                                                       // joystick
+    private final Telemetry logger = new Telemetry(MaxSpeed);
 
-  private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-      .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-      .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
-                                                               // driving in open loop
-  private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
-  private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
-  private final Telemetry logger = new Telemetry(MaxSpeed);
-  private final SendableChooser<Command> automenu;
+    private final CommandXboxController joystick = new CommandXboxController(Constants.OperatorConstants.JOYSTICK_PORT);
 
-  public RobotContainer() {
-    configureBindings();
-    registerNamedCommands();
+    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-    drivetrain.configDrivetrain();
-    automenu = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData(automenu);
-  }
-
-  private void configureBindings() {
-    drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-        drivetrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive
-                                                                                           // forward // with
-            // negative Y (forward)
-            .withVelocityY(-OperatorControllerUtil.handleDeadZone(joystick.getLeftX(), 0.05) * MaxSpeed) // Drive left
-                                                                                                         // with
-                                                                                                         // negative X
-            // (left)
-            .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
-        ));
-
-    joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
-    joystick.b().whileTrue(drivetrain
-        .applyRequest(() -> point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))));
-
-    // reset the field-centric heading on left bumper press
-    joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldRelative));
-
-    joystick.back().onTrue(drivetrain.runOnce(drivetrain::zeroRobotPose));
-
-    if (Utils.isSimulation()) {
-      drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
+    public RobotContainer() {
+        configureBindings();
     }
 
-    drivetrain.registerTelemetry(logger::telemeterize);
-  }
+    private void configureBindings() {
+        // Note that X is defined as forward according to WPILib convention,
+        // and Y is defined as to the left according to WPILib convention.
+        drivetrain.setDefaultCommand(
+            // Drivetrain will execute this command periodically
+            drivetrain.applyRequest(() ->
+                drive.withVelocityX(-OperatorControllerUtil.handleDeadZone(joystick.getLeftY(), 0.10) * MaxSpeed) // Drive forward with negative Y (forward)
 
-  public Command getAutonomousCommand() {
-    return automenu.getSelected();
-  }
+                    .withVelocityY(-OperatorControllerUtil.handleDeadZone(joystick.getLeftX(), 0.10) * MaxSpeed) // Drive left with negative X (left)
 
-  public void registerNamedCommands() {
-    NamedCommands.registerCommand("Around-The-World", new Playsog("aroundtheworld.chrp"));
-    NamedCommands.registerCommand("sonic", new Playsog("sonic.chrp"));
-  }
+                    .withRotationalRate(-OperatorControllerUtil.handleDeadZone(joystick.getRightX(), 0.10) * MaxAngularRate) // Drive counterclockwise with negative X (left)
+            )
+        );
 
-  public void robotInit() {
-  }
+        joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        joystick.b().whileTrue(drivetrain.applyRequest(() ->
+            point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
+        ));
 
-  public void robotPeriodic() {
-  }
+        // Run SysId routines when holding back/start and X/Y.
+        // Note that each routine should be run exactly once in a single log.
+        joystick.back().and(joystick.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
+        joystick.back().and(joystick.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
+        joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
+        joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
-  public void disabledInit() {
-    // candlesubsystem.dontAnimate();
-    // candlesubsystem.setAllLEDToColor(0, 255, 0);
-  }
+        // reset the field-centric heading on left bumper press
+        joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-  public void disabledPeriodic() {
-  }
+        drivetrain.registerTelemetry(logger::telemeterize);
+    }
 
-  public void disabledExit() {
-    // candlesubsystem.dontAnimate();
-  }
-
-  public void autonomousInit() {
-    // candlesubsystem.dontAnimate();
-    // candlesubsystem.setAllLEDToColor(206, 134, 203);
-  }
-
-  public void autonomousPeriodic() {
-  }
-
-  public void autonomousExit() {
-    // candlesubsystem.dontAnimate();
-  }
-
-  public void teleopInit() {
-    // candlesubsystem.dontAnimate();
-    // // candlesubsystem.doAnimate(new FireAnimation(0.9,0.1,120,0.2,0.3,true,0));
-    // candlesubsystem.doAnimate(new RainbowAnimation(0.9, 0.1, Constants.MiscConstants.LEDNUMB));
-  }
-
-  public void teleopPeriodic() {
-  }
-
-  public void teleopExit() {
-    // candlesubsystem.dontAnimate();
-  }
-
-  public void testInit() {
-  }
-
-  public void testPeriodic() {
-  }
-
-  public void testExit() {
-  }
-
-  public void simulationPeriodic() {
-  }
+    public Command getAutonomousCommand() {
+        return Commands.print("No autonomous command configured");
+    }
 }
